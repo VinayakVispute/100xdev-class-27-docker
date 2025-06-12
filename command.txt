@@ -1,0 +1,21 @@
+docker build -f ./docker/dockerFile.backend -t 100xdevs-week27/backend .
+
+docker run -e POSTGRES_PASSWORD=admin -p 5432:5432 --network week27  --name postgres postgres
+docker run -e DATABASE_URL=postgres://postgres:admin@postgres:5432/postgres -p 3001:3001 --network week27 100xdevs-week27/backend
+
+
+docker build -f ./docker/dockerFile.websocket -t 100xdevs-week27/websocket .
+
+
+
+
+docker run -e DATABASE_URL=postgres://postgres:admin@postgres:5432/userdb -p 3001:3001 --network week27 100xdevs-week27/backend
+
+docker run -e DATABASE_URL=postgres://postgres:admin@postgres:5432/postgres -p 3001:3001 --network week27 100xdevs-week27/backend
+
+
+docker run -e DATABASE_URL=postgres://avnadmin:xxx@vinayakvispute-100xdevs-vinayakvispute4-1688.g.aivencloud.com:12527/mydb -p 3001:3001  100xdevs-week27/backend
+
+docker run -e DATABASE_URL=postgres://avnadmin:xxx@vinayakvispute-100xdevs-vinayakvispute4-1688.g.aivencloud.com:12527/mydb -p 3002:3002  100xdevs-week27/websocket
+
+docker build -f ./docker/dockerFile.web -t 100xdevs-week27/web --build-arg DATABASE_URL=postgres://postgres:admin@postgres:5432/userdb .

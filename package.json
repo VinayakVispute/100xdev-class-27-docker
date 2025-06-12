@@ -1,0 +1,28 @@
+{
+  "name": "week-27-todo-app",
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "check-types": "turbo run check-types",
+    "db:generate": "cd packages/db && npx prisma generate && cd ../..",
+    "start:web": "cd apps/web && bun run start",
+    "start:backend": "cd apps/backend && bun run index.ts",
+    "start:websocket": "cd apps/websocket && bun run index.ts"
+  },
+  "devDependencies": {
+    "prettier": "^3.5.0",
+    "turbo": "^2.4.2",
+    "typescript": "5.7.3"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "packageManager": "bun@1.2.2",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
+}

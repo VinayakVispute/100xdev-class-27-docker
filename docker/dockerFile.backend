@@ -1,0 +1,27 @@
+FROM node:22-alpine
+
+RUN npm install -g bun
+
+WORKDIR /app
+
+COPY turbo.json package.json bun.lock ./
+
+COPY apps/backend/package.json apps/backend/tsconfig.json ./apps/backend/
+
+COPY packages/typescript-config ./packages/typescript-config
+
+COPY packages/db/package.json packages/db/tsconfig.json ./packages/db/
+
+RUN bun install 
+
+COPY apps/backend/index.ts ./apps/backend/index.ts
+
+COPY packages/db/prisma packages/db/index.ts ./packages/db/
+
+RUN bun run db:generate
+RUN bun run build
+
+ENV NODE_ENV=production PORT=3001
+EXPOSE 30001
+
+CMD ["bun","run","start:backend"]
