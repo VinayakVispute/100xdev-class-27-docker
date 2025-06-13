@@ -20,6 +20,6 @@ RUN bun run db:generate
 RUN bun run build
 
 ENV NODE_ENV=production PORT=3002
-EXPOSE 3002
+EXPOSE 8002
 
 CMD ["bun","run","start:websocket"]

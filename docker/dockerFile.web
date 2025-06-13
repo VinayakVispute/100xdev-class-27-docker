@@ -30,6 +30,6 @@ RUN cd packages/db && touch .env && echo DATABASE_URL=$DATABASE_URL >> .env && c
 RUN bun run db:generate
 RUN bun run build
 
-EXPOSE 3000
+EXPOSE 8000
 
 CMD ["bun", "run", "start:web"]

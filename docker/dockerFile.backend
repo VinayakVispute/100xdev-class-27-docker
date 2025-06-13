@@ -19,7 +19,7 @@ COPY packages/db/prisma packages/db/index.ts ./packages/db/
 RUN bun run db:generate
 RUN bun run build
 
-ENV NODE_ENV=production PORT=3001
-EXPOSE 30001
+ENV NODE_ENV=production PORT=8001
+EXPOSE 8001
 
 CMD ["bun","run","start:backend"]
