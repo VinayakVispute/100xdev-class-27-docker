@@ -2,9 +2,6 @@ FROM oven/bun:1
 
 WORKDIR /app
 
-# Install OpenSSL for Prisma
-RUN apk add --no-cache openssl1.1-compat
-
 COPY turbo.json package.json bun.lock ./
 
 COPY apps/backend/package.json apps/backend/tsconfig.json ./apps/backend/
