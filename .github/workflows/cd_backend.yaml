@@ -23,4 +23,4 @@ jobs:
           context: .
           file: ./docker/dockerFile.backend
           push: true
-          tags: vinayakvispute/100xdevs-week27-backend
+          tags: vinayakvispute/100xdevs-week27-backend:${{github.sha}}
