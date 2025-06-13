@@ -1,6 +1,9 @@
-FROM oven/bun:latest
+FROM oven/bun:alpine
 
 WORKDIR /app
+
+# Install OpenSSL for Prisma
+RUN apk add --no-cache openssl1.1-compat
 
 COPY turbo.json package.json bun.lock ./
 
