@@ -4,6 +4,14 @@ on:
     branches:
       - main
 
+env:
+  # The repository name on Docker Hub
+  DOCKER_IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/100xdevs-week27-backend # <-- Change this
+  # The static name for the container on the VM
+  CONTAINER_NAME: production-backend-container
+  # ✅ The specific label for this application. This is the key!
+  APP_NAME: production-backend
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -23,4 +31,32 @@ jobs:
           context: .
           file: ./docker/dockerFile.backend
           push: true
-          tags: vinayakvispute/100xdevs-week27-backend:${{github.sha}}
+          tags: ${{env.DOCKER_IMAGE_NAME}}:${{github.sha}}
+          labels: app=${{ env.APP_NAME }}
+
+      - name: Execute remote SSH commands using SSH key & Run Docker file
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_PRODUCTION_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            set -e
+            FULL_IMAGE_NAME="${{ env.DOCKER_IMAGE_NAME }}:${{ github.sha }}"
+
+            echo "🛑 Stopping and removing old container..."
+            docker stop ${{env.CONTAINER_NAME}}
+            docker rm ${{env.CONTAINER_NAME}}
+
+            echo "⬇️ Pulling new image: $FULL_IMAGE_NAME"
+            docker pull $FULL_IMAGE_NAME
+
+            echo "🚀 Running new container..."
+            docker run --name ${env.CONTAINER_NAME} -e DATABASE_URL=${{Secrets.STAGING_DATABASE_URL}} -d --restart always -p 8001:8001 $FULL_IMAGE_NAME
+
+            # ✅ THE TARGETED CLEANUP COMMAND
+            # Prune only unused images that have the label "app=production-backend"
+            echo "🧹 Cleaning up old images for app: ${{ env.APP_NAME }}"
+            docker image prune -a -f --filter "label=app=${{ env.APP_NAME }}"
+
+            echo "All Services are deployed succesfully."
