@@ -6,7 +6,7 @@ on:
 
 env:
   # The repository name on Docker Hub
-  DOCKER_IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/100xdevs-week27-backend # <-- Change this
+  DOCKER_IMAGE_NAME: vinayakvispute/100xdevs-week27-backend # <-- Change this
   # The static name for the container on the VM
   CONTAINER_NAME: production-backend-container
   # ✅ The specific label for this application. This is the key!
