@@ -1,4 +1,4 @@
-name: Build and Deploy Backend
+name: Build and Deploy Websockets
 on:
   push:
     branches:
@@ -6,11 +6,11 @@ on:
 
 env:
   # The repository name on Docker Hub
-  DOCKER_IMAGE_NAME: vinayakvispute/100xdevs-week27-backend # <-- Change this
+  DOCKER_IMAGE_NAME: vinayakvispute/100xdevs-week27-websocket # <-- Change this
   # The static name for the container on the VM
-  CONTAINER_NAME: production-backend-container
+  CONTAINER_NAME: production-websocket-container
   # ✅ The specific label for this application. This is the key!
-  APP_NAME: production-backend
+  APP_NAME: production-websocket
 
 jobs:
   build:
@@ -29,7 +29,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: ./docker/dockerFile.backend
+          file: ./docker/dockerFile.websocket
           push: true
           tags: ${{env.DOCKER_IMAGE_NAME}}:${{github.sha}}
           labels: app=${{ env.APP_NAME }}
@@ -52,7 +52,7 @@ jobs:
             docker pull $FULL_IMAGE_NAME
 
             echo "🚀 Running new container..."
-            docker run --name ${{env.CONTAINER_NAME}} -e DATABASE_URL=${{Secrets.STAGING_DATABASE_URL}} -d --restart always -p 8001:8001 $FULL_IMAGE_NAME
+            docker run --name ${{env.CONTAINER_NAME}} -e DATABASE_URL=${{Secrets.STAGING_DATABASE_URL}} -d --restart always -p 8002:8002 $FULL_IMAGE_NAME
 
             # ✅ THE TARGETED CLEANUP COMMAND
             # Prune only unused images that have the label "app=${{env.APP_NAME}}"
